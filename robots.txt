@@ -1,0 +1,10 @@
+# robots.txt for provable.dev
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://provable.dev/sitemap.xml
+
+# Crawl-delay (optional, adjust as needed)
+Crawl-delay: 1
