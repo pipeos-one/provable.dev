@@ -50,6 +50,14 @@ body {
     font-size: 1.1em;
 }
 
+a {
+    color: var(--darkest);
+}
+
+a:hover {
+    color: var(--stone-dark);
+}
+
 .container {
     max-width: 1400px;
     margin: 0 auto;
@@ -60,6 +68,7 @@ body {
 .hero-section {
     padding: 40px 40px;
     background-color: var(--white);
+    border-radius: 20px;
 }
 
 .hero-grid {
@@ -90,7 +99,6 @@ body {
     color: var(--stone-dark);
     margin-bottom: 8px;
     letter-spacing: 0.02em;
-    text-transform: uppercase;
 }
 
 .subtitle {
@@ -111,7 +119,6 @@ body {
     color: var(--stone-medium);
     margin-bottom: 15px;
     letter-spacing: 0.05em;
-    text-transform: uppercase;
 }
 
 .intro-box {
@@ -119,6 +126,7 @@ body {
     border-left: 4px solid var(--gray-medium);
     padding: 15px 20px;
     margin-top: 20px;
+    border-radius: 20px;
 }
 
 .intro-box p {
@@ -170,7 +178,6 @@ body {
     color: var(--stone-dark);
     margin-bottom: 20px;
     letter-spacing: 0.05em;
-    text-transform: uppercase;
 }
 
 .product-list {
@@ -184,6 +191,7 @@ body {
     background-color: var(--white);
     border: 1px solid var(--gray-lighter);
     transition: border-color 0.3s ease;
+    border-radius: 20px;
 }
 
 .product-item:hover {
@@ -211,7 +219,7 @@ body {
 }
 
 .link {
-    color: var(--stone-medium);
+    color: var(--darkest);
     text-decoration: none;
     font-weight: 600;
     font-size: 0.95em;
@@ -231,6 +239,7 @@ body {
     background-color: var(--gray-lightest);
     border-left: 4px solid var(--gray-medium);
     margin-bottom: 15px;
+    border-radius: 20px;
 }
 
 .notice-section p {
