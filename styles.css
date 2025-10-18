@@ -1,3 +1,27 @@
+@font-face {
+    font-family: 'Roboto Condensed';
+    src: url('fonts/RobotoCondensed-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Roboto Condensed';
+    src: url('fonts/RobotoCondensed-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Roboto Condensed';
+    src: url('fonts/RobotoCondensed-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: block;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,6 +29,7 @@
 }
 
 :root {
+    --darkest: #000000;
     --stone-dark: #2b2d2e;
     --stone-medium: #4a4d4e;
     --stone-light: #6b6d6e;
@@ -18,24 +43,23 @@
 }
 
 body {
-    font-family: 'Crimson Text', 'Georgia', serif;
-    line-height: 1.7;
+    font-family: 'Roboto Condensed', sans-serif;
+    line-height: 1.5;
     color: var(--stone-dark);
     background-color: var(--off-white);
-    font-size: 18px;
+    font-size: 1.1em;
 }
 
 .container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 60px 40px;
+    padding: 30px 40px;
 }
 
 /* Hero Section */
 .hero-section {
-    padding: 80px 40px;
+    padding: 40px 40px;
     background-color: var(--white);
-    border-bottom: 1px solid var(--gray-lighter);
 }
 
 .hero-grid {
@@ -43,7 +67,7 @@ body {
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1.5fr;
-    gap: 80px;
+    gap: 40px;
     align-items: center;
 }
 
@@ -60,43 +84,56 @@ body {
 }
 
 .hero-content h1 {
-    font-family: 'Cinzel', serif;
-    font-size: 3.5em;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 2.5em;
     font-weight: 700;
     color: var(--stone-dark);
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     letter-spacing: 0.02em;
     text-transform: uppercase;
 }
 
 .subtitle {
-    font-size: 1.3em;
+    font-size: 1.1em;
     color: var(--gray-medium);
-    margin-bottom: 50px;
+    margin-bottom: 25px;
     font-style: italic;
 }
 
 .principles {
-    border-top: 2px solid var(--gray-lighter);
-    padding-top: 40px;
+    margin-bottom: 20px;
 }
 
 .principles h2 {
-    font-family: 'Cinzel', serif;
-    font-size: 1.4em;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 1.2em;
     font-weight: 600;
     color: var(--stone-medium);
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
 }
 
+.intro-box {
+    background-color: var(--gray-lightest);
+    border-left: 4px solid var(--gray-medium);
+    padding: 15px 20px;
+    margin-top: 20px;
+}
+
+.intro-box p {
+    color: var(--gray-dark);
+    font-size: 1.1em;
+    line-height: 1.5;
+    margin: 8px 0;
+}
+
 .principle-statement {
-    font-size: 1.15em;
-    line-height: 1.6;
+    font-size: 1.1em;
+    line-height: 1.5;
     color: var(--stone-dark);
-    margin: 25px 0;
-    font-weight: 600;
+    margin: 12px 0;
+    font-weight: 400;
 }
 
 .principle-list {
@@ -123,29 +160,27 @@ body {
 .products-section {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 60px 40px;
+    padding: 30px 40px;
 }
 
 .products-section h2 {
-    font-family: 'Cinzel', serif;
-    font-size: 2em;
-    font-weight: 600;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 1.5em;
+    font-weight: 700;
     color: var(--stone-dark);
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    border-bottom: 2px solid var(--gray-lighter);
-    padding-bottom: 20px;
 }
 
 .product-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 40px;
+    gap: 20px;
 }
 
 .product-item {
-    padding: 35px;
+    padding: 20px;
     background-color: var(--white);
     border: 1px solid var(--gray-lighter);
     transition: border-color 0.3s ease;
@@ -161,18 +196,18 @@ body {
 }
 
 .product-item h3 {
-    font-family: 'Cinzel', serif;
-    font-size: 1.4em;
-    font-weight: 600;
-    color: var(--stone-medium);
-    margin-bottom: 15px;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--darkest);
+    margin-bottom: 10px;
     letter-spacing: 0.03em;
 }
 
 .product-item p {
     color: var(--gray-dark);
-    line-height: 1.6;
-    margin-bottom: 20px;
+    line-height: 1.5;
+    margin-bottom: 12px;
 }
 
 .link {
@@ -192,17 +227,17 @@ body {
 .notice-section {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 40px 40px;
+    padding: 20px 40px;
     background-color: var(--gray-lightest);
     border-left: 4px solid var(--gray-medium);
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .notice-section p {
     color: var(--gray-dark);
-    font-size: 1.05em;
-    line-height: 1.6;
-    margin: 0;
+    font-size: 1em;
+    line-height: 1.5;
+    margin: 8px 0;
 }
 
 /* Footer */
@@ -210,8 +245,8 @@ footer {
     background-color: var(--stone-dark);
     color: var(--gray-lighter);
     text-align: center;
-    padding: 30px 40px;
-    margin-top: 60px;
+    padding: 20px 40px;
+    margin-top: 30px;
     font-size: 0.9em;
 }
 
@@ -229,7 +264,7 @@ footer a:hover {
 @media (max-width: 1024px) {
     .hero-grid {
         grid-template-columns: 1fr;
-        gap: 50px;
+        gap: 30px;
     }
 
     .hero-image {
@@ -250,23 +285,23 @@ footer a:hover {
     .hero-section,
     .products-section,
     .notice-section {
-        padding: 40px 20px;
+        padding: 20px 20px;
     }
 
     .hero-content h1 {
-        font-size: 2.5em;
+        font-size: 2em;
     }
 
     .subtitle {
-        font-size: 1.1em;
+        font-size: 1em;
     }
 
     .principles h2 {
-        font-size: 1.2em;
+        font-size: 1.1em;
     }
 
     .products-section h2 {
-        font-size: 1.6em;
+        font-size: 1.3em;
     }
 
     .product-list {
@@ -274,7 +309,7 @@ footer a:hover {
     }
 
     .product-item {
-        padding: 25px;
+        padding: 15px;
     }
 
     .gate {
