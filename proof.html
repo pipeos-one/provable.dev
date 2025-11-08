@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provable - View Proof</title>
+    <meta name="description" content="View and verify your Provable proof">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <style>
+      body {
+        margin: 0;
+        padding: 24px;
+        font-family: 'Roboto Condensed', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: #f5f6f7;
+        color: #2b2d2e;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .header {
+        margin-bottom: 24px;
+      }
+
+      .header h1 {
+        margin: 0 0 8px;
+        font-size: 1.5rem;
+        color: #2b2d2e;
+      }
+
+      .header p {
+        margin: 0;
+        color: #6b6d6e;
+        font-size: 0.9rem;
+      }
+
+      .snapshot-wrapper {
+        background: white;
+        border: 1px solid #d4d6d7;
+        border-radius: 8px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      #form-snapshot {
+        pointer-events: none;
+        background: #f5f6f7;
+        border: 1px solid #d4d6d7;
+        border-radius: 8px;
+        padding: 16px;
+        overflow: auto;
+        position: relative;
+        contain: layout style paint;
+        margin: 16px 0;
+        font-size: 1rem;
+      }
+
+      #form-snapshot form,
+      #form-snapshot > div {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        pointer-events: none;
+        max-height: 100%;
+        overflow: visible;
+      }
+
+      #form-snapshot * {
+        max-width: 100%;
+        position: static !important;
+      }
+
+      #form-snapshot input,
+      #form-snapshot select,
+      #form-snapshot button {
+        pointer-events: none !important;
+        cursor: default !important;
+      }
+
+      #form-snapshot textarea {
+        pointer-events: auto !important;
+        cursor: text !important;
+      }
+
+      #form-snapshot input:not([type="checkbox"]):not([type="radio"]),
+      #form-snapshot textarea {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      #form-snapshot textarea {
+        height: 200px !important;
+        overflow-y: auto !important;
+        overflow-x: auto !important;
+        resize: vertical;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+
+      #form-snapshot input[type="text"],
+      #form-snapshot input[type="email"],
+      #form-snapshot input[type="tel"],
+      #form-snapshot input[type="url"],
+      #form-snapshot input[type="number"],
+      #form-snapshot input[type="password"],
+      #form-snapshot input[type="date"],
+      #form-snapshot input[type="time"],
+      #form-snapshot input[type="datetime-local"],
+      #form-snapshot textarea,
+      #form-snapshot select {
+        border: 1px solid #d4d6d7;
+        border-radius: 4px;
+        padding: 6px 8px;
+        font-size: 1rem;
+        font-family: inherit;
+        background: white;
+        color: #2b2d2e;
+      }
+
+      #form-snapshot input.kayros-filled,
+      #form-snapshot textarea.kayros-filled,
+      #form-snapshot select.kayros-filled {
+        background: rgba(107, 113, 118, 0.1);
+        border-color: #6b7176;
+        font-weight: 500;
+      }
+
+      #form-snapshot input[type="checkbox"].kayros-filled,
+      #form-snapshot input[type="radio"].kayros-filled {
+        accent-color: #6b7176;
+        outline: 2px solid #6b7176;
+        outline-offset: 2px;
+      }
+
+      #form-snapshot [role="radio"].kayros-filled,
+      #form-snapshot [role="checkbox"].kayros-filled {
+        outline: 2px solid #6b7176 !important;
+        outline-offset: 2px !important;
+        background: rgba(107, 113, 118, 0.05) !important;
+        box-shadow: 0 0 0 2px #6b7176 !important;
+        border-radius: 4px !important;
+        display: inline-block !important;
+        max-width: fit-content !important;
+      }
+
+      #form-snapshot label {
+        font-size: 1rem;
+        color: #2b2d2e;
+        font-weight: 500;
+      }
+
+      #form-snapshot button {
+        opacity: 0.5;
+      }
+
+      .no-snapshot {
+        text-align: center;
+        padding: 48px 24px;
+        color: #9a9c9d;
+      }
+
+      .upload-area {
+        background: white;
+        border: 2px dashed #d4d6d7;
+        border-radius: 8px;
+        padding: 48px 24px;
+        text-align: center;
+        transition: border-color 200ms;
+      }
+
+      .upload-area.drag-over {
+        border-color: #6b7176;
+        background: rgba(107, 113, 118, 0.05);
+      }
+
+      .upload-area p {
+        margin: 0 0 16px;
+        color: #6b6d6e;
+      }
+
+      .upload-button {
+        appearance: none;
+        background: #6b7176;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background 200ms;
+      }
+
+      .upload-button:hover {
+        background: #4a4d4e;
+      }
+
+      .verification-section {
+        background: white;
+        border: 1px solid #d4d6d7;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+
+      .verification-section h2 {
+        margin: 0 0 12px;
+        font-size: 1.1rem;
+        color: #2b2d2e;
+      }
+
+      .verification-item {
+        margin-bottom: 12px;
+        font-size: 0.9rem;
+      }
+
+      .verification-item strong {
+        display: inline-block;
+        width: 180px;
+        color: #6b6d6e;
+      }
+
+      .verification-item.match {
+        color: #059669;
+      }
+
+      .verification-item.mismatch {
+        color: #dc2626;
+      }
+
+      .verification-item a {
+        color: #2563eb;
+        text-decoration: none;
+      }
+
+      .verification-item a:hover {
+        text-decoration: underline;
+      }
+
+      .hash-value {
+        font-family: monospace;
+        font-size: 0.85rem;
+        word-break: break-all;
+      }
+
+      .envelope-section {
+        background: white;
+        border: 1px solid #d4d6d7;
+        border-radius: 8px;
+        padding: 16px;
+        margin-top: 16px;
+      }
+
+      .envelope-section h2 {
+        margin: 0 0 12px;
+        font-size: 1.1rem;
+        color: #2b2d2e;
+      }
+
+      .envelope-textarea {
+        width: 100%;
+        min-height: 200px;
+        font-family: monospace;
+        font-size: 0.85rem;
+        padding: 8px;
+        border: 1px solid #d4d6d7;
+        border-radius: 4px;
+        background: #f5f6f7;
+        color: #2b2d2e;
+        resize: vertical;
+      }
+
+      .error-message {
+        color: #dc2626;
+        background: #fee2e2;
+        border: 1px solid #fecaca;
+        border-radius: 4px;
+        padding: 12px;
+        margin-bottom: 16px;
+        font-size: 0.9rem;
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+      <div class="header">
+        <h1>Provable Form Proof</h1>
+        <p id="page-url">Loading...</p>
+      </div>
+
+      <div id="upload-area" class="upload-area">
+        <p>Drag & drop a Provable proof JSON file here or</p>
+        <button id="upload-button" class="upload-button">Choose File</button>
+        <input type="file" id="file-input" accept=".json" hidden>
+      </div>
+
+      <div class="snapshot-wrapper" id="snapshot-wrapper" hidden>
+        <div id="error-container"></div>
+
+        <div id="verification-section" class="verification-section" hidden>
+          <h2>Verification</h2>
+          <div id="verification-content"></div>
+        </div>
+
+        <div id="remote-record-section" class="envelope-section" hidden>
+          <h2>Remote Timestamp Record</h2>
+          <textarea id="remote-record-json" class="envelope-textarea" readonly></textarea>
+        </div>
+
+        <div id="envelope-section" class="envelope-section" hidden>
+          <h2>Full Proof JSON</h2>
+          <textarea id="envelope-json" class="envelope-textarea" readonly></textarea>
+        </div>
+
+        <div id="form-snapshot" class="no-snapshot">
+            No form snapshot available
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const KayrosHost = "https://kayros.provable.dev";
+
+      function getKayrosApi(route) {
+        return KayrosHost + route;
+      }
+
+      const formSnapshotContainer = document.getElementById('form-snapshot');
+      const pageUrlElement = document.getElementById('page-url');
+      const uploadArea = document.getElementById('upload-area');
+      const snapshotWrapper = document.getElementById('snapshot-wrapper');
+      const uploadButton = document.getElementById('upload-button');
+      const fileInput = document.getElementById('file-input');
+      const errorContainer = document.getElementById('error-container');
+      const verificationSection = document.getElementById('verification-section');
+      const verificationContent = document.getElementById('verification-content');
+      const envelopeSection = document.getElementById('envelope-section');
+      const envelopeJsonTextarea = document.getElementById('envelope-json');
+      const remoteRecordSection = document.getElementById('remote-record-section');
+      const remoteRecordJsonTextarea = document.getElementById('remote-record-json');
+
+      const createFormSnapshot = (formHtml, data = {}) => {
+        const container = document.createElement('div');
+        container.innerHTML = formHtml;
+
+        const dataKeys = new Set(Object.keys(data));
+
+        // Handle native form elements
+        container.querySelectorAll('input, textarea, select').forEach(element => {
+          const name = element.getAttribute('name');
+
+          if (name && dataKeys.has(name)) {
+            const value = data[name];
+
+            if (element instanceof HTMLInputElement) {
+              if (element.type === 'checkbox' || element.type === 'radio') {
+                if (element.hasAttribute('checked')) {
+                  element.checked = true;
+                  element.classList.add('kayros-filled');
+                }
+              } else if (element.type === 'file') {
+                if (element.hasAttribute('data-has-files')) {
+                  element.classList.add('kayros-filled');
+                  if (typeof value === 'object' && value !== null && 'fileName' in value) {
+                    const fileInfo = value;
+                    element.title = `${fileInfo.fileName} (${fileInfo.size} bytes)`;
+                  }
+                }
+              } else if (element.hasAttribute('value') && element.getAttribute('value')) {
+                element.classList.add('kayros-filled');
+              }
+            } else if (element instanceof HTMLTextAreaElement) {
+              if (element.textContent && element.textContent.trim()) {
+                element.classList.add('kayros-filled');
+              }
+            } else if (element instanceof HTMLSelectElement) {
+              Array.from(element.options).forEach(option => {
+                if (option.hasAttribute('selected')) {
+                  option.selected = true;
+                }
+              });
+
+              const hasSelected = Array.from(element.options).some(opt => opt.selected);
+              if (hasSelected) {
+                element.classList.add('kayros-filled');
+              }
+            }
+          }
+
+          element.setAttribute('disabled', 'true');
+          element.style.pointerEvents = 'none';
+        });
+
+        // Handle ARIA form controls
+        container.querySelectorAll('[role="radio"], [role="checkbox"]').forEach(element => {
+          const isChecked = element.getAttribute('aria-checked') === 'true';
+
+          if (isChecked) {
+            element.classList.add('kayros-filled');
+            element.setAttribute('data-kayros-checked', 'true');
+          }
+
+          element.style.pointerEvents = 'none';
+        });
+
+        container.querySelectorAll('button').forEach(el => {
+          el.setAttribute('disabled', 'true');
+          el.style.pointerEvents = 'none';
+        });
+
+        container.querySelectorAll('script').forEach(script => script.remove());
+
+        return container.cloneNode(true);
+      };
+
+      const hashPayload = async (payload) => {
+        const jsonString = JSON.stringify(payload);
+        const encoder = new TextEncoder();
+        const data = encoder.encode(jsonString);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashHex;
+      };
+
+      const renderSnapshot = async (payload, envelope) => {
+        uploadArea.hidden = true;
+        snapshotWrapper.hidden = false;
+        errorContainer.innerHTML = '';
+
+        // Display page URL
+        pageUrlElement.textContent = payload.pageUrl || 'Unknown page';
+
+        // Get formHtml and formData from the payload
+        const formHtml = payload.form?.formHtml;
+        const formData = payload.form?.data || payload.network?.formData || {};
+
+        // Render the form snapshot
+        if (formHtml) {
+          const snapshot = createFormSnapshot(formHtml, formData);
+          formSnapshotContainer.innerHTML = '';
+          formSnapshotContainer.classList.remove('no-snapshot');
+          formSnapshotContainer.appendChild(snapshot);
+        } else {
+          formSnapshotContainer.textContent = 'No form HTML available';
+        }
+
+        // If we have an envelope, show verification and full envelope
+        if (envelope) {
+          await renderVerification(envelope);
+          renderEnvelope(envelope);
+        }
+      };
+
+      const showError = (message) => {
+        errorContainer.innerHTML = `<div class="error-message">${message}</div>`;
+      };
+
+      const renderVerification = async (envelope) => {
+        try {
+          // Compute hash of the payload
+          const computedHash = await hashPayload(envelope.data);
+
+          // Check if envelope has required fields
+          if (!envelope.kayros) {
+            showError('Missing field: envelope.kayros');
+            return;
+          }
+
+          if (!envelope.kayros.hash) {
+            showError('Missing field: envelope.kayros.hash');
+            return;
+          }
+
+          const envelopeHash = envelope.kayros.hash;
+          const hashMatch = computedHash === envelopeHash;
+
+          const items = [];
+
+          // Show computed hash vs envelope hash
+          items.push(`
+            <div class="verification-item ${hashMatch ? 'match' : 'mismatch'}">
+              <strong>Hash Match:</strong> ${hashMatch ? '✓ Verified' : '✗ Mismatch'}
+            </div>
+          `);
+
+          items.push(`
+            <div class="verification-item">
+              <strong>Computed Hash:</strong>
+              <div class="hash-value">${computedHash}</div>
+            </div>
+          `);
+
+          items.push(`
+            <div class="verification-item">
+              <strong>Envelope Hash:</strong>
+              <div class="hash-value">${envelopeHash}</div>
+            </div>
+          `);
+
+          // Check for timestamp
+          if (envelope.kayros.timestamp) {
+            if (!envelope.kayros.timestamp.response) {
+              showError('Missing field: envelope.kayros.timestamp.response');
+              return;
+            }
+
+            const timestampResponse = envelope.kayros.timestamp.response;
+
+            if (!timestampResponse.data) {
+              showError('Missing field: envelope.kayros.timestamp.response.data');
+              return;
+            }
+
+            if (!timestampResponse.data.computed_hash_hex) {
+              showError('Missing field: envelope.kayros.timestamp.response.data.computed_hash_hex');
+              return;
+            }
+
+            const remoteHash = timestampResponse.data.computed_hash_hex;
+            const remoteRecordUrl = getKayrosApi(`/api/database/record-by-hash?hash_item=${remoteHash}`);
+
+            items.push(`
+              <div class="verification-item">
+                <strong>Timestamp Record:</strong>
+                <a href="${remoteRecordUrl}" target="_blank">View on Kayros</a>
+              </div>
+            `);
+
+            // Fetch remote record with retry
+            try {
+              let response = await fetch(remoteRecordUrl);
+
+              // Retry once after 2 seconds if failed
+              if (!response.ok) {
+                console.warn('[Provable Form] First fetch attempt failed, retrying in 2 seconds...');
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                response = await fetch(remoteRecordUrl);
+              }
+
+              if (response.ok) {
+                const remoteRecord = await response.json();
+
+                if (remoteRecord.data && remoteRecord.data.data_item_hex) {
+                  const remoteDataItemHex = remoteRecord.data.data_item_hex;
+                  const remoteMatch = computedHash === remoteDataItemHex;
+
+                  items.push(`
+                    <div class="verification-item ${remoteMatch ? 'match' : 'mismatch'}">
+                      <strong>Remote Verification:</strong> ${remoteMatch ? '✓ Hash matches remote record' : '✗ Hash does not match remote'}
+                    </div>
+                  `);
+
+                  items.push(`
+                    <div class="verification-item">
+                      <strong>Remote Data Item:</strong>
+                      <div class="hash-value">${remoteDataItemHex}</div>
+                    </div>
+                  `);
+
+                  if (remoteRecord.data.timestamp) {
+                    items.push(`
+                      <div class="verification-item">
+                        <strong>Timestamp:</strong> ${remoteRecord.data.timestamp}
+                      </div>
+                    `);
+                  }
+                }
+
+                // Display remote record
+                remoteRecordSection.hidden = false;
+                remoteRecordJsonTextarea.value = JSON.stringify(remoteRecord, null, 2);
+              } else {
+                items.push(`
+                  <div class="verification-item mismatch">
+                    <strong>Remote Record:</strong> Failed to fetch (status ${response.status})
+                  </div>
+                `);
+              }
+            } catch (error) {
+              items.push(`
+                <div class="verification-item mismatch">
+                  <strong>Remote Record:</strong> Error fetching record
+                </div>
+              `);
+              console.error('Failed to fetch remote record:', error);
+            }
+          }
+
+          verificationContent.innerHTML = items.join('');
+          verificationSection.hidden = false;
+        } catch (error) {
+          showError(`Verification error: ${error instanceof Error ? error.message : String(error)}`);
+          console.error('Verification error:', error);
+        }
+      };
+
+      const renderEnvelope = (envelope) => {
+        envelopeSection.hidden = false;
+        envelopeJsonTextarea.value = JSON.stringify(envelope, null, 2);
+      };
+
+      const loadSnapshotFromUrl = async (url) => {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch: ${response.status}`);
+          }
+          const parsed = await response.json();
+
+          // Check if it's an envelope
+          const isEnvelope = parsed && typeof parsed === 'object' && 'data' in parsed && 'kayros' in parsed;
+
+          if (isEnvelope) {
+            const envelope = parsed;
+            const payload = envelope.data;
+            await renderSnapshot(payload, envelope);
+          } else {
+            // Legacy format
+            const payload = parsed;
+            await renderSnapshot(payload);
+          }
+        } catch (error) {
+          console.error('Failed to load snapshot from URL:', error);
+          uploadArea.hidden = false;
+          snapshotWrapper.hidden = true;
+          pageUrlElement.textContent = 'Failed to load proof from URL';
+          showError(`Error: ${error instanceof Error ? error.message : String(error)}`);
+        }
+      };
+
+      const loadSnapshot = async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlParam = urlParams.get('url');
+        const dataParam = urlParams.get('data');
+
+        if (urlParam) {
+          // Load from external URL
+          await loadSnapshotFromUrl(urlParam);
+        } else if (dataParam) {
+          // Load from base64 encoded data
+          try {
+            const decodedData = decodeURIComponent(escape(atob(dataParam)));
+            const parsed = JSON.parse(decodedData);
+
+            // Check if it's an envelope
+            const isEnvelope = parsed && typeof parsed === 'object' && 'data' in parsed && 'kayros' in parsed;
+
+            if (isEnvelope) {
+              const envelope = parsed;
+              const payload = envelope.data;
+              await renderSnapshot(payload, envelope);
+            } else {
+              // Legacy format
+              const payload = parsed;
+              await renderSnapshot(payload);
+            }
+          } catch (error) {
+            console.error('Failed to load snapshot:', error);
+            uploadArea.hidden = false;
+            snapshotWrapper.hidden = true;
+            pageUrlElement.textContent = 'Failed to load proof from data';
+          }
+        } else {
+          // Show upload area
+          uploadArea.hidden = false;
+          snapshotWrapper.hidden = true;
+          pageUrlElement.textContent = 'Upload a proof file to view';
+        }
+      };
+
+      const loadSnapshotFromFile = (file) => {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          try {
+            const parsed = JSON.parse(e.target.result);
+
+            // Check if it's an envelope
+            const isEnvelope = parsed && typeof parsed === 'object' && 'data' in parsed && 'kayros' in parsed;
+
+            if (isEnvelope) {
+              const envelope = parsed;
+              const payload = envelope.data;
+              await renderSnapshot(payload, envelope);
+            } else {
+              // Legacy format
+              const payload = parsed;
+              await renderSnapshot(payload);
+            }
+          } catch (error) {
+            console.error('Failed to parse JSON file:', error);
+            alert('Invalid JSON file. Please upload a valid proof file.');
+          }
+        };
+        reader.readAsText(file);
+      };
+
+      // Drag and drop
+      uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('drag-over');
+      });
+
+      uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('drag-over');
+      });
+
+      uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('drag-over');
+        const file = e.dataTransfer?.files[0];
+        if (file && file.type === 'application/json') {
+          loadSnapshotFromFile(file);
+        }
+      });
+
+      // Click to upload
+      uploadButton.addEventListener('click', () => {
+        fileInput.click();
+      });
+
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files?.[0];
+        if (file) {
+          loadSnapshotFromFile(file);
+        }
+      });
+
+      loadSnapshot();
+    </script>
+</body>
+</html>
