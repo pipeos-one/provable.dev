@@ -216,6 +216,8 @@ a:hover {
     border: 1px solid var(--gray-lighter);
     transition: border-color 0.3s ease;
     border-radius: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .product-item:hover {
@@ -249,6 +251,7 @@ a:hover {
     font-size: 0.95em;
     letter-spacing: 0.03em;
     transition: color 0.3s ease;
+    margin-top: auto;
 }
 
 .link:hover {
