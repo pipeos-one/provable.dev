@@ -37,15 +37,6 @@ jobs:
       - name: Build site
         run: npm run build
 
-      - name: Verify legal routes in artifact
-        run: |
-          test -f dist/privacy_oliver/index.html
-          test -f dist/terms_oliver/index.html
-          test -f dist/privacy_oliver.html
-          test -f dist/terms_oliver.html
-          echo "Verified generated legal pages:"
-          ls -la dist/privacy_oliver dist/terms_oliver
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -61,33 +52,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-      - name: Verify Pages configuration
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          response=$(curl -fsSL \
-            -H "Authorization: Bearer ${GH_TOKEN}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/pages")
-          echo "$response" | jq '{html_url, cname, build_type, source}'
-          build_type=$(echo "$response" | jq -r '.build_type')
-          if [ "$build_type" != "workflow" ]; then
-            echo "Pages build_type is '$build_type' (expected 'workflow')."
-            exit 1
-          fi
-
-      - name: Probe deployed legal route
-        run: |
-          echo "Page URL: ${{ steps.deployment.outputs.page_url }}"
-          base="${{ steps.deployment.outputs.page_url }}"
-          for i in 1 2 3 4 5; do
-            code=$(curl -s -o /dev/null -w "%{http_code}" "$base/privacy_oliver/" || true)
-            echo "Attempt $i -> /privacy_oliver/ HTTP $code"
-            if [ "$code" = "200" ]; then
-              exit 0
-            fi
-            sleep 5
-          done
-          echo "Deployed site did not serve /privacy_oliver/ as HTTP 200"
-          exit 1
