@@ -37,6 +37,15 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Verify legal routes in artifact
+        run: |
+          test -f dist/privacy_oliver/index.html
+          test -f dist/terms_oliver/index.html
+          test -f dist/privacy_oliver.html
+          test -f dist/terms_oliver.html
+          echo "Verified generated legal pages:"
+          ls -la dist/privacy_oliver dist/terms_oliver
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
