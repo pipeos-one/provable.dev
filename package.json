@@ -1,0 +1,22 @@
+{
+  "name": "provable-dev-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "npm run build:site && npm run build:app",
+    "build:site": "node scripts/build-site.mjs",
+    "build:app": "vite build",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
+    "marked": "^13.0.2",
+    "vite": "^5.4.14"
+  }
+}
